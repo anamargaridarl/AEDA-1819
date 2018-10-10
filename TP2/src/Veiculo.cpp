@@ -38,6 +38,10 @@ int Veiculo::getAno() const
 	return ano;
 }
 
+//função virtual-> permite aplicar o mesmo objetivo final mas a classes diferentes
+//função é inicializada para cada classe de acordo com os atributos de cada uma,
+//podendo ser usadas as funções das classes anteriores
+
 int Veiculo::info() const
 {
 	cout << "Marca " << marca << endl;
@@ -72,5 +76,78 @@ int Bicicleta::info() const{
 	cout << "Tipo " << tipo << endl;
 	return 4;
 }
+
+bool Veiculo::operator < (const Veiculo & v) const
+{
+	if(ano != v.ano)
+	{
+		if(ano < v.ano)
+			return true;
+		else return false;
+	}
+	else
+	{
+		if(mes < v.mes)
+				return true;
+		else return false;
+	}
+
+}
+
+float Motorizado::calcImposto() const {
+
+	if (((combustivel == "gasolina") && (cilindrada <= 1000))
+			|| ((combustivel != "gasolina") && (cilindrada <= 1500)))
+	{
+		if (ano > 1995)
+			return 14.56;
+		else
+			return 8.10;
+	}
+	else if (((combustivel == "gasolina") && (cilindrada <= 1300))
+			|| ((combustivel != "gasolina") && (cilindrada <= 2000)))
+	{
+		if (ano > 1995)
+			return 29.06;
+		else
+			return 14.56;
+	}
+	else if (((combustivel == "gasolina") && (cilindrada <= 1750))
+			|| ((combustivel != "gasolina") && (cilindrada <= 3000)))
+	{
+		if (ano > 1995)
+			return 45.15;
+		else
+			return 22.65;
+	}
+	else if (((combustivel == "gasolina") && (cilindrada > 1750)
+			&& (cilindrada <= 2600)) || (combustivel != "gasolina"))
+	{
+		if (ano > 1995)
+			return 113.98;
+		else
+			return 54.89;
+	}
+	else if ((combustivel == "gasolina") && (cilindrada <= 3500))
+	{
+		if (ano > 1995)
+			return 181.17;
+		else
+			return 87.13;
+	}
+	else if (combustivel == "gasolina")
+	{
+		if (ano > 1995)
+			return 320.89;
+		else
+			return 148.37;
+	}
+}
+
+//confirmar com professora
+float Bicicleta::calcImposto() const {
+	return 0;
+}
+
 
 
