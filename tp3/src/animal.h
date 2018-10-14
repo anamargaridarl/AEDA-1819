@@ -19,6 +19,8 @@ public:
 	static int getMaisJovem() {return maisJovem;};
 	virtual bool eJovem()const = 0;
 	virtual string getInformacao() const;
+	void setVet(Veterinario *v1);
+	Veterinario*  getVet();
 	//completar
 };
 

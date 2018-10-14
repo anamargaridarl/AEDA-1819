@@ -5,7 +5,9 @@
 #include <string>
 using namespace std;
 
-class Veterinario {
+
+class Veterinario
+{
 	string nome;
 	long codOrdem;
 public:

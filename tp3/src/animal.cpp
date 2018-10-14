@@ -56,7 +56,9 @@ string Animal::getInformacao() const
 	string final;
 	final = nome + ", " + to_string(idade) + ", ";
 	if(vet != NULL)
-		final = final + vet->getNome() + ", " + to_string(vet->getCod());
+	{
+		final = final + this->vet->getNome() + ", " + to_string(this->vet->getCod()) + ", ";
+	}
 
 	return final;
 
@@ -66,14 +68,14 @@ string Cao::getInformacao() const
 {
 	string final;
 	final = Animal::getInformacao();
-	final = final + " " + raca;
+	final = final + this->raca;
 	return final;
 }
 
 string Voador::getInformacao() const
 {
 	string final;
-	final = " " + to_string(velocidade_max) + " "+ to_string(altura_max);
+	final = to_string(this->velocidade_max) + ", "+ to_string(this->altura_max);
 	return final;
 }
 
@@ -84,5 +86,14 @@ string Morcego::getInformacao() const
 	return final;
 }
 
+void Animal::setVet(Veterinario *v1)
+{
+	vet =v1;
+}
+
+Veterinario* Animal::getVet()
+{
+	return vet;
+}
 
 
