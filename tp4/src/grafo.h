@@ -119,12 +119,12 @@ int Grafo<N,A>::numNos(void) const
 template <class N, class A>
 int Grafo<N,A>::numArestas(void) const
 {
-	int arestas =0;
+	int arestas = 0;
 
-	for(size_t i =0; i < nos.size();i++)
-		{
-			arestas = arestas + nos.at(i)->arestas.size();
-		}
+	for(size_t i = 0; i < nos.size() ;i++)
+	{
+		arestas = arestas + nos.at(i)->arestas.size();
+	}
 
 return arestas;
 }
@@ -183,10 +183,10 @@ public:
 
 template <class N>
 std::ostream & operator<<(std::ostream &out, const ArestaRepetida<N> &ni)
-{ out << "Aresta Repetida com no inicial: " << ni.infoI << "e no final" << ni.infoF; return out; }
+{ out << "Aresta repetida: " << ni.infoI << " , " << ni.infoF; return out; }
 
 
-
+/*
 template <class N, class A>
 bool lookForAresta(const No<N,A> &a, const N &fim)
 {
@@ -199,49 +199,49 @@ bool lookForAresta(const No<N,A> &a, const N &fim)
 
 	}
 }
+*/
+template <class N, class A>
+int indiceNo(vector< No<N,A> *> nos, const N &dado)
+{
+	for (size_t i = 0; i < nos.size();i++)
+	{
+		if(nos.at(i)->info == dado)
+		return (int)i;
+	}
+
+	return -1;
+}
 
 template <class N, class A>
 Grafo<N,A> & Grafo<N,A>::inserirAresta(const N &inicio, const N &fim, const A &val)
 {
-	int flagI =0;
-	int flagF =0;
 	int indI, indF;
 
 	/* esta a dar erro operador ==
 	No<N,A > *ini = new No<N,A>(inicio);
 	No<N,A > *end = new No<N,A>(fim);*/
 
-	//procurar se nos de inicio e fim de aresta existem
+		//procura no de inicio e fim
+		indI = indiceNo(nos, inicio);
+		indF = indiceNo(nos, fim);
 
-		for (size_t i = 0; i < nos.size();i++)
-		{
-			if(nos.at(i)->info == inicio)
-			{
-				 indI = i;
-				 flagI++;
-			}
-			else if(nos.at(i)->info == fim)
-			{
-				indF = i;
-				flagF++;
-			}
-
-		}
-
-		if(flagI == 0)
+		if(indI == -1)
 			throw(NoInexistente<N>(inicio));
-		else if(flagF == 0)
+		if(indF == -1)
 			throw(NoInexistente<N>(fim));
-		else
+
+
+		//procura se a aresta já existe:
+		//procura no no inicial se ja existe aresta com mesmo destino que o no final
+		for(size_t i = 0; i < nos.at(indI)->arestas.size(); i++)
 		{
-			if(lookForAresta(*(nos.at(indF)),fim))
+			if(nos.at(indI)->arestas.at(i).destino->info == fim)
 				throw(ArestaRepetida<N>(inicio, fim));
-			else
-			{
-				Aresta<N,A> a (nos.at(indF),val);
-				nos.at(indI)->arestas.push_back(a);
-			}
 		}
+
+		Aresta<N,A> a (nos.at(indF),val);
+		nos.at(indI)->arestas.push_back(a);
+
 
 	return *this;
 
@@ -263,32 +263,28 @@ public:
 
 template <class N>
 std::ostream & operator<<(std::ostream &out, const ArestaInexistente<N> &ni)
-{ out << "Aresta Repetida com no inicial: " << ni.infoI << "e no final" << ni.infoF; return out; }
+{ out << "Aresta inexistente: " << ni.infoI << " , " << ni.infoF; return out; }
 
-
+template<class N,class A>
 A & Grafo<N,A>::valorAresta(const N &inicio, const N &fim)
 {
-	for (size_t i = 0; i < nos.size();i++)
-	{
-		int flag = 0;
+	int indI,indF;
 
-		if(nos.at(i)->info == inicio)
-		{
+	indI = indiceNo(nos, inicio);
+	indF = indiceNo(nos, fim);
 
-		for (size_t n = 0; i < nos.at(i)->arestas.size(); n++)
+	if(indI == -1)
+		throw(NoInexistente<N>(inicio));
+	if(indF == -1)
+		throw(NoInexistente<N>(fim));
+
+		for (size_t n = 0; n < nos.at(indI)->arestas.size(); n++) //procura nas arestas se no final existe
 		{
-			if(nos.at(i)->arestas.at(n)->destino ==fim)
-			{
-				flag++;
-				return this->nos.at(i)->arestas.at(n)->valor;
-			}
+			if(nos.at(indI)->arestas.at(n).destino->info==fim) //no final existe
+				return nos.at(indI)->arestas.at(n).valor;
 		}
 
-		}
-	}
-
-	throw(ArestaInixestente<N>(inicio,fim));
-
+throw(ArestaInexistente<N>(inicio,fim));
 
 }
 
